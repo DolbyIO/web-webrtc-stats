@@ -16,9 +16,17 @@ jobs:
 
             - name: Print NPM version 🌎
               run: npm --version
-            - name: Install the dependencies 🔧
+            - name: Install the dependencies 🧱
               run: npm install
             - name: Test the package 🔧
               run: npm run test
-            - name: Build the package 🔧
-              run: npm run build
+            - name: Build the package 🔨
+              run: |
+                  npm run build
+                  npm pack
+            - name: Upload artifact 🗄️
+              uses: actions/upload-artifact@v3
+              with:
+                  name: npm-package
+                  path: ./*.tgz
+                  retention-days: 7

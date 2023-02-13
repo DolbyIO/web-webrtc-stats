@@ -12,12 +12,7 @@ module.exports = {
         ],
     },
     externals: {
-        'js-logger': {
-            amd: 'Logger',
-            root: 'Logger',
-            commonjs: 'Logger',
-            commonjs2: 'Logger',
-        },
+        'js-logger':'js-logger',
     },
     resolve: {
         extensions: ['.tsx', '.ts', '.js'],

@@ -3,6 +3,7 @@
     "version": "0.1.0",
     "description": "Dolby.io WebRTC Statistics",
     "main": "dist/webrtc-stats.js",
+    "typings": "dist/index.d.ts",
     "scripts": {
         "build": "webpack",
         "prettier": "prettier --write .",

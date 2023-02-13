@@ -15,13 +15,13 @@ jobs:
 
             - name: Print NPM version 🌎
               run: npm --version
-            - name: Install the dependencies 🔧
+            - name: Install the dependencies 🧱
               run: npm install
             - name: Test the package 🔧
               run: npm run test
-            - name: Build the package 🔧
+            - name: Build the package 🔨
               run: npm run build
-            - name: Deploy to NPMJS 🚀
+            - name: Deploy to npm 🚀
               run: |
                   npm config set //registry.npmjs.org/:_authToken=${{ secrets.NPMJS_AUTH_TOKEN }}
                   npm publish
