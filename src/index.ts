@@ -39,7 +39,7 @@ class WebRTCStats extends EventEmitter {
         this.#logger.info('WebRTC statistics collection is starting...');
         this.#lastOnStats = null;
 
-        this.#intervalId = setInterval(this.parseStats, this.#getStatsInterval);
+        this.#intervalId = setInterval(this.#parseStats, this.#getStatsInterval);
     };
 
     /**
@@ -53,7 +53,7 @@ class WebRTCStats extends EventEmitter {
         }
     };
 
-    private parseStats = async () => {
+    #parseStats = async () => {
         let rtcStatsReport: RTCStatsReport;
         let timestamp: string;
         try {
@@ -96,9 +96,9 @@ class WebRTCStats extends EventEmitter {
                     const outEntry: RTCOutboundRtpStreamStats = entry as RTCOutboundRtpStreamStats;
                     const outMediaKind = getMediaKind(outEntry);
                     if (outMediaKind === 'audio') {
-                        await this.parseOutboundRtpAudio(rtcStatsReport, outEntry, eventPayload);
+                        await this.#parseOutboundRtpAudio(rtcStatsReport, outEntry, eventPayload);
                     } else if (outMediaKind === 'video') {
-                        await this.parseOutboundRtpVideo(rtcStatsReport, outEntry, eventPayload);
+                        await this.#parseOutboundRtpVideo(rtcStatsReport, outEntry, eventPayload);
                     }
                     break;
 
@@ -106,16 +106,16 @@ class WebRTCStats extends EventEmitter {
                     const inEntry: RTCInboundRtpStreamStats = entry as RTCInboundRtpStreamStats;
                     let inMediaKind = getMediaKind(inEntry);
                     if (inMediaKind === 'audio') {
-                        await this.parseInboundRtpAudio(rtcStatsReport, inEntry, eventPayload);
+                        await this.#parseInboundRtpAudio(rtcStatsReport, inEntry, eventPayload);
                     } else if (inMediaKind === 'video') {
-                        await this.parseInboundRtpVideo(rtcStatsReport, inEntry, eventPayload);
+                        await this.#parseInboundRtpVideo(rtcStatsReport, inEntry, eventPayload);
                     }
                     break;
 
                 case 'candidate-pair':
                     const cpEntry: RTCIceCandidatePairStats = entry as RTCIceCandidatePairStats;
                     if (cpEntry.nominated) {
-                        this.parseCandidatePair(cpEntry, eventPayload);
+                        this.#parseCandidatePair(cpEntry, eventPayload);
                     }
                     break;
 
@@ -131,7 +131,7 @@ class WebRTCStats extends EventEmitter {
         this.emit(WebRTCStatsEvents.stats, eventPayload);
     };
 
-    private getCodec(rtcStatsReport: RTCStatsReport, codecId?: string): StatsCodec {
+    #getCodec(rtcStatsReport: RTCStatsReport, codecId?: string): StatsCodec {
         if (codecId) {
             const codec: RTCRtpCodecParameters = rtcStatsReport.get(codecId) as RTCRtpCodecParameters;
             if (codec) {
@@ -144,10 +144,10 @@ class WebRTCStats extends EventEmitter {
         return {};
     }
 
-    private async getOutputAudio(rtcStatsReport: RTCStatsReport, entry: RTCOutboundRtpStreamStats, last: OutputAudio): Promise<OutputAudio> {
+    async #getOutputAudio(rtcStatsReport: RTCStatsReport, entry: RTCOutboundRtpStreamStats, last: OutputAudio): Promise<OutputAudio> {
         const bitrate = calculateRate(entry.timestamp, entry.bytesSent, last?.timestamp, last?.totalBytesSent);
         const packetRate = calculateRate(entry.timestamp, entry.packetsSent, last?.timestamp, last?.totalPacketsSent);
-        const codec = this.getCodec(rtcStatsReport, entry.codecId);
+        const codec = this.#getCodec(rtcStatsReport, entry.codecId);
 
         const outputAudio: OutputAudio = {
             id: entry.id,
@@ -166,20 +166,20 @@ class WebRTCStats extends EventEmitter {
         return outputAudio;
     }
 
-    private async parseOutboundRtpAudio(rtcStatsReport: RTCStatsReport, entry: RTCOutboundRtpStreamStats, eventPayload: OnStats) {
+    async #parseOutboundRtpAudio(rtcStatsReport: RTCStatsReport, entry: RTCOutboundRtpStreamStats, eventPayload: OnStats) {
         const last: OutputAudio = this.#lastOnStats?.output.audio.find((a) => a.id === entry.id);
         if (last && entry.timestamp - last.timestamp <= 0) return;
 
-        const outputAudio: OutputAudio = await this.getOutputAudio(rtcStatsReport, entry, last);
+        const outputAudio: OutputAudio = await this.#getOutputAudio(rtcStatsReport, entry, last);
 
         eventPayload.output.audio.push(outputAudio);
     }
 
-    private async parseOutboundRtpVideo(rtcStatsReport: RTCStatsReport, entry: RTCOutboundRtpStreamStats, eventPayload: OnStats) {
+    async #parseOutboundRtpVideo(rtcStatsReport: RTCStatsReport, entry: RTCOutboundRtpStreamStats, eventPayload: OnStats) {
         const last: OutputVideo = this.#lastOnStats?.output.video.find((a) => a.id === entry.id);
         if (last && entry.timestamp - last.timestamp <= 0) return;
 
-        const outputAudio: OutputAudio = await this.getOutputAudio(rtcStatsReport, entry, last);
+        const outputAudio: OutputAudio = await this.#getOutputAudio(rtcStatsReport, entry, last);
 
         const outputVideo: OutputVideo = {
             ...outputAudio,
@@ -192,12 +192,12 @@ class WebRTCStats extends EventEmitter {
         eventPayload.output.video.push(outputVideo);
     }
 
-    private async getInputAudio(rtcStatsReport: RTCStatsReport, entry: RTCInboundRtpStreamStats, last: InputAudio): Promise<InputAudio> {
+    async #getInputAudio(rtcStatsReport: RTCStatsReport, entry: RTCInboundRtpStreamStats, last: InputAudio): Promise<InputAudio> {
         const bitrate = calculateRate(entry.timestamp, entry.bytesReceived, last?.timestamp, last?.totalBytesReceived);
         const packetRate = calculateRate(entry.timestamp, entry.packetsReceived, last?.timestamp, last?.totalPacketsReceived);
         const packetLossRatio = calculatePacketsLostRatio(entry.packetsReceived, entry.packetsLost, last?.totalPacketsReceived, last?.totalPacketsLost);
         const packetLossDelta = (entry.packetsLost ?? 0) - (last?.totalPacketsLost ?? 0);
-        const codec = this.getCodec(rtcStatsReport, entry.codecId);
+        const codec = this.#getCodec(rtcStatsReport, entry.codecId);
 
         const inputAudio: InputAudio = {
             id: entry.id,
@@ -218,20 +218,20 @@ class WebRTCStats extends EventEmitter {
         return inputAudio;
     }
 
-    private async parseInboundRtpAudio(rtcStatsReport: RTCStatsReport, entry: RTCInboundRtpStreamStats, eventPayload: OnStats) {
+    async #parseInboundRtpAudio(rtcStatsReport: RTCStatsReport, entry: RTCInboundRtpStreamStats, eventPayload: OnStats) {
         const last: InputAudio = this.#lastOnStats?.input.audio.find((a) => a.id === entry.id);
         if (last && entry.timestamp - last.timestamp <= 0) return;
 
-        const inputAudio: InputAudio = await this.getInputAudio(rtcStatsReport, entry, last);
+        const inputAudio: InputAudio = await this.#getInputAudio(rtcStatsReport, entry, last);
 
         eventPayload.input.audio.push(inputAudio);
     }
 
-    private async parseInboundRtpVideo(rtcStatsReport: RTCStatsReport, entry: RTCInboundRtpStreamStats, eventPayload: OnStats) {
+    async #parseInboundRtpVideo(rtcStatsReport: RTCStatsReport, entry: RTCInboundRtpStreamStats, eventPayload: OnStats) {
         const last: InputVideo = this.#lastOnStats?.input.video.find((a) => a.id === entry.id);
         if (last && entry.timestamp - last.timestamp <= 0) return;
 
-        const inputAudio: InputAudio = await this.getInputAudio(rtcStatsReport, entry, last);
+        const inputAudio: InputAudio = await this.#getInputAudio(rtcStatsReport, entry, last);
 
         const inputVideo: InputVideo = {
             ...inputAudio,
@@ -247,7 +247,7 @@ class WebRTCStats extends EventEmitter {
         eventPayload.input.video.push(inputVideo);
     }
 
-    private parseCandidatePair(entry: RTCIceCandidatePairStats, eventPayload: OnStats) {
+    #parseCandidatePair(entry: RTCIceCandidatePairStats, eventPayload: OnStats) {
         eventPayload.totalRoundTripTime = entry.totalRoundTripTime;
         eventPayload.currentRoundTripTime = entry.currentRoundTripTime;
         eventPayload.responsesReceived = entry.responsesReceived;
