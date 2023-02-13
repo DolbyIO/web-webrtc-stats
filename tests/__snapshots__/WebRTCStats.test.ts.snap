@@ -5,7 +5,6 @@ WebRTCStats {
   "_events": {},
   "_eventsCount": 0,
   "_maxListeners": undefined,
-  "parseStats": [Function],
   "start": [Function],
   "stop": [Function],
   Symbol(kCapture): false,
