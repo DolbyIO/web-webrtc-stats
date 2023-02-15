@@ -62,7 +62,7 @@ class WebRTCStats extends EventEmitter {
             timestamp = new Date().toISOString();
         } catch (error) {
             this.#logger.error('Problem collecting the WebRTC statistics.', error);
-            this.emit(WebRTCStatsEvents.error, 'Problem collecting the WebRTC statistics.', error);
+            this.emit(WebRTCStatsEvents.error, `Problem collecting the WebRTC statistics - ${error}`);
 
             return;
         }
