@@ -5,7 +5,7 @@ export interface StatsBase {
     timestamp: number;
     /** Media stream "identification-tag" negotiated and present in the local and remote descriptions. */
     mid?: string;
-    /** Current bitrate in bits per second. */
+    /** Current bitrate in bytes per second. */
     bitrate?: number;
     /** Current packet rate in packets per second. */
     packetRate?: number;
@@ -19,8 +19,12 @@ export interface StatsCodec {
 export interface OutputAudio extends StatsBase, StatsCodec {
     /** Total number of bytes sent for this SSRC. */
     totalBytesSent?: number;
+    /** Number of bytes sent for this SSRC since last collection. */
+    bytesSentDelta?: number;
     /** Total number of packets sent for this SSRC. */
     totalPacketsSent?: number;
+    /** Number of packets sent for this SSRC since last collection. */
+    packetsSentDelta?: number;
     /**
      * Reflects the current encoder target in bits per second.
      * The target is an instantaneous value reflecting the encoder's settings,
@@ -30,8 +34,18 @@ export interface OutputAudio extends StatsBase, StatsCodec {
     targetBitrate?: number;
     /** The total number of packets that were retransmitted for this SSRC. */
     retransmittedPacketsSent?: number;
-    /** The total number of bytes that were retransmitted for this SSRC, only including payload bytes. */
+    /** Number of packets that were retransmitted for this SSRC since last collection. */
+    retransmittedPacketsSentDelta?: number;
+    /**
+     * The total number of bytes that were retransmitted for this SSRC,
+     * only including payload bytes.
+     */
     retransmittedBytesSent?: number;
+    /**
+     * Number of bytes that were retransmitted for this SSRC,
+     * only including payload bytes since last collection.
+     */
+    retransmittedBytesSentDelta?: number;
 }
 
 export interface OutputVideo extends OutputAudio {

@@ -79,9 +79,6 @@ class WebRTCStats extends EventEmitter {
                 audio: [],
                 video: [],
             },
-            totalRoundTripTime: -1,
-            currentRoundTripTime: -1,
-            availableOutgoingBitrate: -1,
         };
 
         if (this.#includeRawStats) {
@@ -154,12 +151,16 @@ class WebRTCStats extends EventEmitter {
             timestamp: entry.timestamp,
             mid: entry.mid,
             totalBytesSent: entry.bytesSent,
+            bytesSentDelta: entry.bytesSent - (last?.totalBytesSent ?? 0),
             totalPacketsSent: entry.packetsSent,
+            packetsSentDelta: entry.packetsSent - (last?.totalPacketsSent ?? 0),
             bitrate: bitrate,
             packetRate: packetRate,
             targetBitrate: entry.targetBitrate,
             retransmittedPacketsSent: entry.retransmittedPacketsSent,
+            retransmittedPacketsSentDelta: entry.retransmittedPacketsSent - (last?.retransmittedPacketsSent ?? 0),
             retransmittedBytesSent: entry.retransmittedBytesSent,
+            retransmittedBytesSentDelta: entry.retransmittedBytesSent - (last?.retransmittedBytesSent ?? 0),
             ...codec,
         };
 

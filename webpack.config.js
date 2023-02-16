@@ -12,7 +12,7 @@ module.exports = {
         ],
     },
     externals: {
-        'js-logger':'js-logger',
+        'js-logger': 'js-logger',
     },
     resolve: {
         extensions: ['.tsx', '.ts', '.js'],

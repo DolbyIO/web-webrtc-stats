@@ -92,7 +92,7 @@ collection.on('error', (error) => {
 Example on how to start a statistics collection from the [Dolby.io Communications APIs](https://docs.dolby.io/communications-apis/docs).
 
 ```js
-import WebRTCStats, { WebRTCStatsEvents } from '@dolbyio/webrtc-stats';
+import WebRTCStats from '@dolbyio/webrtc-stats';
 import VoxeetSdk from '@voxeet/voxeet-web-sdk';
 
 const collection = new WebRTCStats({
@@ -113,7 +113,7 @@ const collection = new WebRTCStats({
 });
 
 // The stats event is triggered after each interval has elapsed
-collection.on(WebRTCStatsEvents.stats, (event) => {
+collection.on('stats', (event) => {
     // Triggered when the statistics have been parsed
     console.log(event);
 });
@@ -127,7 +127,7 @@ collection.start();
 Example on how to start a statistics collection from the [Dolby.io Real-time Streaming APIs](https://docs.dolby.io/streaming-apis/docs).
 
 ```js
-import WebRTCStats, { WebRTCStatsEvents } from '@dolbyio/webrtc-stats';
+import WebRTCStats from '@dolbyio/webrtc-stats';
 import { Director, Publish } from '@millicast/sdk';
 
 const PUBLISHER_TOKEN = '';
@@ -151,7 +151,7 @@ const collection = new WebRTCStats({
 });
 
 // The stats event is triggered after each interval has elapsed
-collection.on(WebRTCStatsEvents.stats, (event) => {
+collection.on('stats', (event) => {
     // Triggered when the statistics have been parsed
     console.log(event);
 });
