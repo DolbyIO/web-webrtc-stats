@@ -3,8 +3,7 @@ import second from './webRTCStats/second.json';
 import codec from './webRTCStats/codec.json';
 import noCodec from './webRTCStats/noCodec.json';
 import parseCandidatePair from './webRTCStats/parseCandidatePair.json';
-import WebRTCStats, { WebRTCStatsEvents } from '../src/';
-import { OnStats } from '../src/types/WebRTCStats';
+import WebRTCStats, { WebRTCStatsEvents, OnStats } from '../src/';
 
 const getLocalStats = (data: any) => {
     return new Promise<RTCStatsReport>((r) => {
