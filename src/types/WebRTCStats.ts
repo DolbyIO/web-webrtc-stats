@@ -151,11 +151,11 @@ export interface OnStats {
 
 export interface WebRTCStatsOptions {
     /**
-     * Function that will be called to retrieve the WebRTS statistics.
+     * Function that will be called to retrieve the WebRTC statistics.
      * @returns a {@link RTCStatsReport} object through a {@link Promise}.
      */
     getStats: () => Promise<RTCStatsReport>;
-    /** Interval, in milliseconds, at which to collect the WebRTS statistics. Default is 1,000 ms (1 second). */
+    /** Interval, in milliseconds, at which to collect the WebRTC statistics. Default is 1,000 ms (1 second). */
     getStatsInterval?: number;
     /** Include the raw statistics in the `stats` event. Default is `false`. */
     includeRawStats?: boolean;

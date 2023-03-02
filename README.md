@@ -5,7 +5,7 @@
 
 # Dolby.io WebRTC Statistics
 
-This project is a library to use to parse WebRTS statistics.
+This project is a library to use to parse WebRTC statistics.
 
 ## Install this project
 
@@ -24,13 +24,13 @@ A `WebRTCStats` object needs to be created to start a WebRTC statistics collecti
 ```js
 interface WebRTCStatsOptions {
     /**
-     * Function that will be called to retrieve the WebRTS statistics.
+     * Function that will be called to retrieve the WebRTC statistics.
      * @returns a {@link RTCStatsReport} object through a {@link Promise}.
      */
     getStats: () => Promise<RTCStatsReport>;
 
     /**
-     * Interval, in milliseconds, at which to collect the WebRTS statistics.
+     * Interval, in milliseconds, at which to collect the WebRTC statistics.
      * Default is 1,000 ms (1 second).
      */
     getStatsInterval?: number;
