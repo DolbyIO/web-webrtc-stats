@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`utils test suite utils should match the snapshot 1`] = `
+{
+  "calculatePacketsLostRatio": [Function],
+  "calculateRate": [Function],
+  "getMediaKind": [Function],
+}
+`;
