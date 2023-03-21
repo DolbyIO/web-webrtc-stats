@@ -148,6 +148,13 @@ export interface RTCOfferOptions extends RTCOfferAnswerOptions {
     offerToReceiveVideo?: boolean;
 }
 
+export enum RTCQualityLimitationReason {
+    'none',
+    'cpu',
+    'bandwidth',
+    'other',
+}
+
 export interface RTCOutboundRtpStreamStats extends RTCSentRtpStreamStats {
     firCount?: number;
     frameHeight?: number;
@@ -162,6 +169,8 @@ export interface RTCOutboundRtpStreamStats extends RTCSentRtpStreamStats {
     nackCount?: number;
     pliCount?: number;
     qpSum?: number;
+    qualityLimitationReason?: RTCQualityLimitationReason;
+    qualityLimitationDurations?: Record<string, number>;
     qualityLimitationResolutionChanges?: number;
     remoteId?: string;
     retransmittedBytesSent?: number;
