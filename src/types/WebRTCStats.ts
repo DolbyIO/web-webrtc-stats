@@ -16,7 +16,22 @@ export interface StatsCodec {
     mimeType?: string;
 }
 
-export interface OutputAudio extends StatsBase, StatsCodec {
+export enum QualityLimitationReason {
+    /** The resolution and/or framerate is not limited. */
+    'none',
+    /** The resolution and/or framerate is primarily limited due to CPU load. */
+    'cpu',
+    /**
+     * The resolution and/or framerate is primarily limited due to congestion cues during bandwidth estimation.
+     * Typical, congestion control algorithms use inter-arrival time,
+     * round-trip time, packet or other congestion cues to perform bandwidth estimation.
+     */
+    'bandwidth',
+    /** The resolution and/or framerate is primarily limited for a reason other than the above. */
+    'other',
+}
+
+export interface OutputBase extends StatsBase, StatsCodec {
     /** Total number of bytes sent for this SSRC. */
     totalBytesSent?: number;
     /** Number of bytes sent for this SSRC since last collection. */
@@ -48,7 +63,9 @@ export interface OutputAudio extends StatsBase, StatsCodec {
     retransmittedBytesSentDelta?: number;
 }
 
-export interface OutputVideo extends OutputAudio {
+export interface OutputAudio extends OutputBase {}
+
+export interface OutputVideo extends OutputBase {
     /** Represents the width of the last encoded frame. */
     frameWidth?: number;
     /** Represents the height of the last encoded frame. */
@@ -57,6 +74,10 @@ export interface OutputVideo extends OutputAudio {
     framesPerSecond?: number;
     /** Represents the total number of frames sent on this RTP stream. */
     framesSent?: number;
+    /** The current reason for limiting the resolution and/or framerate, or "none" if not limited. */
+    qualityLimitationReason: QualityLimitationReason;
+    /** A record of the total time, in seconds, that this stream has spent in each quality limitation state. */
+    qualityLimitationDurations?: Record<string, number>;
 }
 
 export interface InputAudio extends StatsBase, StatsCodec {

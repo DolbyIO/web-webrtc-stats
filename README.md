@@ -1,6 +1,6 @@
 [![Build Package](https://github.com/DolbyIO/web-webrtc-stats/actions/workflows/build-package.yml/badge.svg)](https://github.com/DolbyIO/web-webrtc-stats/actions/workflows/build-package.yml)
-[![Publish Package](https://github.comDolbyIO/web-webrtc-stats/actions/workflows/publish-package.yml/badge.svg)](https://github.com/DolbyIO/web-webrtc-stats/actions/workflows/publish-package.yml)
-[![npm](https://img.shields.io/npm/v/@dolbyio/web-webrtc-stats)](https://www.npmjs.com/package/@dolbyio/web-webrtc-stats)
+[![Publish Package](https://github.com/DolbyIO/web-webrtc-stats/actions/workflows/publish-package.yml/badge.svg)](https://github.com/DolbyIO/web-webrtc-stats/actions/workflows/publish-package.yml)
+[![npm](https://img.shields.io/npm/v/@dolbyio/webrtc-stats)](https://www.npmjs.com/package/@dolbyio/webrtc-stats)
 [![License](https://img.shields.io/github/license/DolbyIO/web-webrtc-stats)](LICENSE)
 
 # Dolby.io WebRTC Statistics
