@@ -133,6 +133,7 @@ export interface RTCInboundRtpStreamStats extends RTCReceivedRtpStreamStats {
     totalSamplesDuration?: number;
     totalSamplesReceived?: number;
     totalSquaredInterFrameDelay?: number;
+    trackIdentifier: string;
 }
 
 export interface RTCLocalSessionDescriptionInit {

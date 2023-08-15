@@ -81,6 +81,8 @@ export interface OutputVideo extends OutputBase {
 }
 
 export interface InputAudio extends StatsBase, StatsCodec {
+    /** The value of the MediaStreamTrack's id attribute. */
+    trackIdentifier: string;
     /** Packet Jitter measured in seconds for this SSRC. */
     jitter?: number;
     /**
