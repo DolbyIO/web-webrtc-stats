@@ -225,6 +225,7 @@ class WebRTCStats extends EventEmitter {
             id: entry.id,
             timestamp: entry.timestamp,
             mid: entry.mid,
+            trackIdentifier: entry.trackIdentifier,
             jitter: entry.jitter,
             jitterBufferDelay: entry.jitterBufferDelay,
             jitterBufferEmittedCount: entry.jitterBufferEmittedCount,
