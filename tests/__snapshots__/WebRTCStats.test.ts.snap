@@ -7,7 +7,6 @@ WebRTCStats {
   "_maxListeners": undefined,
   "start": [Function],
   "stop": [Function],
-  Symbol(shapeMode): false,
   Symbol(kCapture): false,
 }
 `;
