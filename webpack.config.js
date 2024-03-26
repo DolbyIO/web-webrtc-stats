@@ -11,15 +11,13 @@ module.exports = {
             },
         ],
     },
-    externals: {
-        'js-logger': 'js-logger',
-    },
     resolve: {
         extensions: ['.tsx', '.ts', '.js'],
     },
-    devtool: 'eval-source-map',
+    devtool: 'source-map',
     output: {
         filename: 'webrtc-stats.js',
+        sourceMapFilename: 'webrtc-stats.js.map',
         path: path.resolve(__dirname, 'dist'),
         library: 'WebRTCStats',
         libraryTarget: 'umd',
