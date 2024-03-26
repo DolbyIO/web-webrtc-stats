@@ -87,41 +87,6 @@ collection.on('error', (error) => {
 
 ### Examples
 
-#### Dolby.io Communications APIs
-
-Example on how to start a statistics collection from the [Dolby.io Communications APIs](https://docs.dolby.io/communications-apis/docs).
-
-```js
-import WebRTCStats from '@dolbyio/webrtc-stats';
-import VoxeetSdk from '@voxeet/voxeet-web-sdk';
-
-const collection = new WebRTCStats({
-    getStatsInterval: 1000,
-    getStats: async () => {
-        // See: https://docs.dolby.io/communications-apis/docs/js-client-sdk-conferenceservice#localstats
-        const webRTCStats = await VoxeetSDK.conference.localStats();
-
-        // Convert the WebRTCStats object to RTCStatsReport
-        const values = Array.from(webRTCStats.values())[0];
-        const map = new Map();
-        for (let i = 0; i < values.length; i++) {
-            const element = values[i];
-            map.set(element.id, element);
-        }
-        return map;
-    },
-});
-
-// The stats event is triggered after each interval has elapsed
-collection.on('stats', (event) => {
-    // Triggered when the statistics have been parsed
-    console.log(event);
-});
-
-// Start the statistics collection
-collection.start();
-```
-
 #### Dolby.io Real-time Streaming APIs
 
 Example on how to start a statistics collection from the [Dolby.io Real-time Streaming APIs](https://docs.dolby.io/streaming-apis/docs).
@@ -147,6 +112,41 @@ const collection = new WebRTCStats({
     getStatsInterval: 1000,
     getStats: () => {
         return publisher.webRTCPeer.getRTCPeer().getStats();
+    },
+});
+
+// The stats event is triggered after each interval has elapsed
+collection.on('stats', (event) => {
+    // Triggered when the statistics have been parsed
+    console.log(event);
+});
+
+// Start the statistics collection
+collection.start();
+```
+
+#### Dolby.io Communications APIs
+
+Example on how to start a statistics collection from the [Dolby.io Communications APIs](https://docs.dolby.io/communications-apis/docs).
+
+```js
+import WebRTCStats from '@dolbyio/webrtc-stats';
+import VoxeetSdk from '@voxeet/voxeet-web-sdk';
+
+const collection = new WebRTCStats({
+    getStatsInterval: 1000,
+    getStats: async () => {
+        // See: https://docs.dolby.io/communications-apis/docs/js-client-sdk-conferenceservice#localstats
+        const webRTCStats = await VoxeetSDK.conference.localStats();
+
+        // Convert the WebRTCStats object to RTCStatsReport
+        const values = Array.from(webRTCStats.values())[0];
+        const map = new Map();
+        for (let i = 0; i < values.length; i++) {
+            const element = values[i];
+            map.set(element.id, element);
+        }
+        return map;
     },
 });
 
