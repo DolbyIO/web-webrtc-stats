@@ -16,7 +16,7 @@ jobs:
             - name: Print NPM version 🌎
               run: npm --version
             - name: Install the dependencies 🧱
-              run: npm install
+              run: npm ci
             - name: Test the package 🔧
               run: npm run test
             - name: Build the package 🔨

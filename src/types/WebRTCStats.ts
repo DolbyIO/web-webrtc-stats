@@ -1,3 +1,8 @@
+import { WebRTCStatsOptions } from './options';
+
+/**
+ * Represents the base of the statistics object.
+ */
 export interface StatsBase {
     /** A unique id that is associated with the object that was inspected to produce this {@link StatsBase} object. */
     id: string;
@@ -11,11 +16,19 @@ export interface StatsBase {
     packetRate?: number;
 }
 
+/**
+ * Represents the MIME type of the codec.
+ */
 export interface StatsCodec {
     /** The codec MIME media type/subtype. e.g., video/vp8 or equivalent. */
     mimeType?: string;
 }
 
+/**
+ * The enum representing a reason for limiting the resolution and/or framerate, or `none` if not limited.
+ *
+ * @see [RTCQualityLimitationReason](https://w3c.github.io/webrtc-stats/#rtcqualitylimitationreason-enum)
+ */
 export enum QualityLimitationReason {
     /** The resolution and/or framerate is not limited. */
     'none',
@@ -31,6 +44,9 @@ export enum QualityLimitationReason {
     'other',
 }
 
+/**
+ * Represents the base statistics object for an output stream.
+ */
 export interface OutputBase extends StatsBase, StatsCodec {
     /** Total number of bytes sent for this SSRC. */
     totalBytesSent?: number;
@@ -63,8 +79,14 @@ export interface OutputBase extends StatsBase, StatsCodec {
     retransmittedBytesSentDelta?: number;
 }
 
+/**
+ * Represents the statistics object for an output audio stream.
+ */
 export interface OutputAudio extends OutputBase {}
 
+/**
+ * Represents the statistics object for an output video stream.
+ */
 export interface OutputVideo extends OutputBase {
     /** Represents the width of the last encoded frame. */
     frameWidth?: number;
@@ -80,6 +102,9 @@ export interface OutputVideo extends OutputBase {
     qualityLimitationDurations?: Record<string, number>;
 }
 
+/**
+ * Represents the statistics object for an input audio stream.
+ */
 export interface InputAudio extends StatsBase, StatsCodec {
     /** The value of the MediaStreamTrack's id attribute. */
     trackIdentifier: string;
@@ -109,9 +134,12 @@ export interface InputAudio extends StatsBase, StatsCodec {
     packetLossDelta?: number;
 }
 
+/**
+ * Represents the statistics object for an input video stream.
+ */
 export interface InputVideo extends InputAudio {
     /**
-     * It represents the total number of key frames, such as key frames in VP8 [RFC6386]
+     * Represents the total number of key frames, such as key frames in VP8 [RFC6386]
      * or IDR-frames in H.264 [RFC6184], successfully decoded for this RTP media stream.
      */
     keyFramesDecoded?: number;
@@ -119,7 +147,7 @@ export interface InputVideo extends InputAudio {
     frameWidth?: number;
     /** Represents the height of the last decoded frame. */
     frameHeight?: number;
-    /** It represents the total number of frames correctly decoded for this RTP stream, i.e., frames that would be displayed if no frames are dropped. */
+    /** Represents the total number of frames correctly decoded for this RTP stream, i.e., frames that would be displayed if no frames are dropped. */
     framesDecoded?: number;
     /** The total number of frames dropped prior to decode or dropped because the frame missed its display deadline for this receiver's track. */
     framesDropped?: number;
@@ -129,16 +157,27 @@ export interface InputVideo extends InputAudio {
     framesReceived?: number;
 }
 
+/**
+ * Represents the parsed WebRTC statistics collected for an input or output audio & video stream.
+ */
 export interface AudioVideoCollect<TAudio, TVideo> {
+    /** Audio statistics. */
     audio: TAudio[];
+    /** Video statistics. */
     video: TVideo[];
 }
 
+/**
+ * Represents the parsed WebRTC statistics collected.
+ */
 export interface OnStats {
     /** Gets the time at which the statistics were collected as a string value in ISO format. */
     timestamp: string;
+    /** List of audio & video output statistics. */
     output: AudioVideoCollect<OutputAudio, OutputVideo>;
+    /** List of audio & video input statistics. */
     input: AudioVideoCollect<InputAudio, InputVideo>;
+    /** Raw statistics, if {@link WebRTCStatsOptions.includeRawStats | includeRawStats} is set to `true` in the collection options. */
     rawStats?: RTCStatsReport;
     /**
      * Represents the sum of all round trip time measurements in seconds since the beginning of the session,
@@ -170,16 +209,4 @@ export interface OnStats {
      * it is measured in bits per second and the bitrate is calculated over a 1 second window.
      */
     availableIncomingBitrate?: number;
-}
-
-export interface WebRTCStatsOptions {
-    /**
-     * Function that will be called to retrieve the WebRTC statistics.
-     * @returns a {@link RTCStatsReport} object through a {@link Promise}.
-     */
-    getStats: () => Promise<RTCStatsReport>;
-    /** Interval, in milliseconds, at which to collect the WebRTC statistics. Default is 1,000 ms (1 second). */
-    getStatsInterval?: number;
-    /** Include the raw statistics in the `stats` event. Default is `false`. */
-    includeRawStats?: boolean;
 }

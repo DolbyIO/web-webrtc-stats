@@ -14,14 +14,15 @@ module.exports = {
     resolve: {
         extensions: ['.tsx', '.ts', '.js'],
     },
-    devtool: 'source-map',
+    devtool: 'eval-source-map',
     output: {
         filename: 'webrtc-stats.js',
         sourceMapFilename: 'webrtc-stats.js.map',
         path: path.resolve(__dirname, 'dist'),
-        library: 'WebRTCStats',
-        libraryTarget: 'umd',
-        libraryExport: 'default',
+        library: {
+            name: 'WebRTCStats',
+            type: 'umd',
+        },
     },
     mode: 'production',
 };

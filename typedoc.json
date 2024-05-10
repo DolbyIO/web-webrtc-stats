@@ -1,0 +1,17 @@
+{
+    "$schema": "https://typedoc.org/schema.json",
+    "navigationLinks": {
+        "GitHub": "https://github.com/DolbyIO/web-webrtc-stats",
+        "NPM": "https://www.npmjs.com/package/@dolbyio/webrtc-stats"
+    },
+    "name": "Dolby.io WebRTC Statistics",
+    "includeVersion": true,
+    "entryPoints": ["src/index.ts"],
+    "entryPointStrategy": "expand",
+    "excludeExternals": true,
+    "excludePrivate": true,
+    "excludeNotDocumented": true,
+    "excludeNotDocumentedKinds": ["Property", "Interface", "TypeAlias"],
+    "plugin": ["typedoc-plugin-mdn-links"],
+    "out": "docs"
+}
