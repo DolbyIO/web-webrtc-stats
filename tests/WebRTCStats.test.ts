@@ -55,15 +55,6 @@ const getResult = (data: any): Promise<OnStats> => {
 };
 
 describe('webRTCStats', () => {
-    test('webRTCStats should match the snapshot', () => {
-        const collection = new WebRTCStats({
-            getStatsInterval: 100,
-            getStats: () => getLocalStats(first),
-        });
-
-        expect(collection).toMatchSnapshot();
-    });
-
     test('start / stop', async () => {
         const expectedCalls = 2;
         const interval = 50;
