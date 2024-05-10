@@ -1,4 +1,5 @@
 [![Build Package](https://github.com/DolbyIO/web-webrtc-stats/actions/workflows/build-package.yml/badge.svg)](https://github.com/DolbyIO/web-webrtc-stats/actions/workflows/build-package.yml)
+[![Build Documentation](https://github.com/DolbyIO/web-webrtc-stats/actions/workflows/build-documentation.yml/badge.svg)](https://github.com/DolbyIO/web-webrtc-stats/actions/workflows/build-documentation.yml)
 [![Publish Package](https://github.com/DolbyIO/web-webrtc-stats/actions/workflows/publish-package.yml/badge.svg)](https://github.com/DolbyIO/web-webrtc-stats/actions/workflows/publish-package.yml)
 [![npm](https://img.shields.io/npm/v/@dolbyio/webrtc-stats)](https://www.npmjs.com/package/@dolbyio/webrtc-stats)
 [![License](https://img.shields.io/github/license/DolbyIO/web-webrtc-stats)](LICENSE)
@@ -9,43 +10,25 @@ This project is a library to use to parse WebRTC statistics.
 
 ## Install this project
 
-Run the npm command to install the package `@dolbyio/webrtc-stats` into your project:
+Run the following npm command to install the package `@dolbyio/webrtc-stats` into your project:
 
 ```bash
-npm install @dolbyio/webrtc-stats --save
+npm install @dolbyio/webrtc-stats
 ```
 
 ## Use the library
 
 ### Collection
 
-A `WebRTCStats` object needs to be created to start a WebRTC statistics collection. It requires some settings to configure how you want the collection to work.
+A `WebRTCStats` object needs to be created to start a WebRTC statistics collection. It requires some settings to configure how you want the collection to work. First, import the `WebRTCStats` definition.
 
-```js
-interface WebRTCStatsOptions {
-    /**
-     * Function that will be called to retrieve the WebRTC statistics.
-     * @returns a {@link RTCStatsReport} object through a {@link Promise}.
-     */
-    getStats: () => Promise<RTCStatsReport>;
-
-    /**
-     * Interval, in milliseconds, at which to collect the WebRTC statistics.
-     * Default is 1,000 ms (1 second).
-     */
-    getStatsInterval?: number;
-
-    /**
-     * Include the raw statistics in the `stats` event.
-     * Default is `false`.
-     */
-    includeRawStats?: boolean;
-}
+```ts
+import { WebRTCStats } from '@dolbyio/webrtc-stats';
 ```
 
-Create the collection object.
+Create the collection object like this example:
 
-```js
+```ts
 const collection = new WebRTCStats({
     getStats: () => {
         // Get the raw WebRTC statistics from the web browser
@@ -57,42 +40,42 @@ const collection = new WebRTCStats({
 
 Start the collection with the `start()` function.
 
-```js
+```ts
 collection.start();
 ```
 
 Stop the collection with the `stop()` function.
 
-```js
+```ts
 collection.stop();
 ```
 
 ### Events
 
-After starting the collection, the `stats` event is triggered when the WebRTC statistics have been collected and parsed. The `event` object is of type [OnStats](src/types/WebRTCStats.ts).
+After starting the collection, the `stats` event is triggered when the WebRTC statistics have been collected and parsed.
 
-```js
-collection.on('stats', (event) => {
+```ts
+import { OnStats } from '@dolbyio/webrtc-stats';
+
+collection.on('stats', (event: OnStats) => {
     console.log(event);
 });
 ```
 
 The `error` event is triggered when an error happens during the collection or the parsing of the WebRTC statistics.
 
-```js
-collection.on('error', (error) => {
-    console.error(error);
+```ts
+collection.on('error', (reason: string) => {
+    console.error(reason);
 });
 ```
 
-### Examples
+### Example
 
-#### Dolby.io Real-time Streaming APIs
+Example on how to start a statistics collection from the [Dolby Millicast](https://docs.dolby.io/streaming-apis/docs) SDK.
 
-Example on how to start a statistics collection from the [Dolby.io Real-time Streaming APIs](https://docs.dolby.io/streaming-apis/docs).
-
-```js
-import WebRTCStats from '@dolbyio/webrtc-stats';
+```ts
+import { WebRTCStats, OnStats } from '@dolbyio/webrtc-stats';
 import { Director, Publish } from '@millicast/sdk';
 
 const PUBLISHER_TOKEN = '';
@@ -106,7 +89,7 @@ const tokenGenerator = () =>
 
 const publisher = new Publish(STREAM_NAME, tokenGenerator);
 
-// Publish the stream
+// HERE: Publish a stream to Dolby Millicast
 
 const collection = new WebRTCStats({
     getStatsInterval: 1000,
@@ -116,8 +99,7 @@ const collection = new WebRTCStats({
 });
 
 // The stats event is triggered after each interval has elapsed
-collection.on('stats', (event) => {
-    // Triggered when the statistics have been parsed
+collection.on('stats', (event: OnStats) => {
     console.log(event);
 });
 
@@ -125,39 +107,16 @@ collection.on('stats', (event) => {
 collection.start();
 ```
 
-#### Dolby.io Communications APIs
+## Logs
 
-Example on how to start a statistics collection from the [Dolby.io Communications APIs](https://docs.dolby.io/communications-apis/docs).
+You can also print the logs in the console and select the log level by using the following code.
 
-```js
-import WebRTCStats from '@dolbyio/webrtc-stats';
-import VoxeetSdk from '@voxeet/voxeet-web-sdk';
+```ts
+import { Logger } from '@dolbyio/webrtc-stats';
 
-const collection = new WebRTCStats({
-    getStatsInterval: 1000,
-    getStats: async () => {
-        // See: https://docs.dolby.io/communications-apis/docs/js-client-sdk-conferenceservice#localstats
-        const webRTCStats = await VoxeetSDK.conference.localStats();
-
-        // Convert the WebRTCStats object to RTCStatsReport
-        const values = Array.from(webRTCStats.values())[0];
-        const map = new Map();
-        for (let i = 0; i < values.length; i++) {
-            const element = values[i];
-            map.set(element.id, element);
-        }
-        return map;
-    },
+Logger.useDefaults({
+    defaultLevel: Logger.TRACE,
 });
-
-// The stats event is triggered after each interval has elapsed
-collection.on('stats', (event) => {
-    // Triggered when the statistics have been parsed
-    console.log(event);
-});
-
-// Start the statistics collection
-collection.start();
 ```
 
 ## How to
@@ -173,3 +132,16 @@ Create distribution package:
 ```bash
 npm run build
 ```
+
+The documentation is built on [TypeDoc](https://typedoc.org), to generate the doc, run the following command. You will find the HTML files in the `docs` folder.
+
+```bash
+npm run docs
+```
+
+## Related Projects
+
+-   [Millicast SDK](https://github.com/millicast/millicast-sdk)
+-   [js-logger](https://github.com/jonnyreeves/js-logger)
+-   [TypeDoc](https://typedoc.org)
+-   [Jest](https://jestjs.io/)

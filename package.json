@@ -1,13 +1,14 @@
 {
     "name": "@dolbyio/webrtc-stats",
-    "version": "0.4.0",
+    "version": "1.0.0",
     "description": "Dolby.io WebRTC Statistics",
     "main": "dist/webrtc-stats.js",
     "typings": "dist/index.d.ts",
     "scripts": {
         "build": "webpack",
         "prettier": "prettier --write .",
-        "test": "jest"
+        "test": "jest",
+        "docs": "typedoc"
     },
     "repository": {
         "type": "git",
@@ -37,7 +38,9 @@
         "prettier": "^3.2.5",
         "ts-jest": "^29.1.2",
         "ts-loader": "^9.5.1",
-        "typescript": "^5.4.3",
+        "typedoc": "^0.25.13",
+        "typedoc-plugin-mdn-links": "^3.1.24",
+        "typescript": "^5.4.5",
         "webpack": "^5.91.0",
         "webpack-cli": "^5.1.4"
     }

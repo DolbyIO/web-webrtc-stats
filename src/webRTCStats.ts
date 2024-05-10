@@ -2,25 +2,54 @@ import { EventEmitter } from 'events';
 import Logger, { ILogger } from 'js-logger';
 
 import { RTCStatsReport, RTCStats, RTCOutboundRtpStreamStats, RTCInboundRtpStreamStats } from './types/lib.dom';
-import {
-    InputAudio,
-    InputVideo,
-    OutputAudio,
-    OutputVideo,
-    OnStats,
-    WebRTCStatsOptions,
-    StatsCodec,
-    OutputBase,
-    QualityLimitationReason,
-} from './types/WebRTCStats';
+import { InputAudio, InputVideo, OutputAudio, OutputVideo, OnStats, StatsCodec, OutputBase, QualityLimitationReason } from './types/WebRTCStats';
+import { WebRTCStatsOptions } from './types/options';
+import { WebRTCStatsEvents } from './types/webRTCStatsEvents';
 import { getMediaKind, calculateRate, calculatePacketsLostRatio } from './utils';
 
-export const WebRTCStatsEvents = {
-    error: 'error',
-    stats: 'stats',
-};
+export interface WebRTCStats {
+    /**
+     * Adds the `listener` function to the end of the listeners array for the
+     * event named `eventName`. No checks are made to see if the `listener` has
+     * already been added. Multiple calls passing the same combination of `eventName`and `listener` will result in the `listener` being added, and called, multiple
+     * times.
+     *
+     * @param eventName The name of the event.
+     * @param listener The callback function.
+     *
+     * @returns A reference to the {@link EventEmitter}, so that calls can be chained.
+     */
+    on<N extends keyof WebRTCStatsEvents>(eventName: N, listener: WebRTCStatsEvents[N]): this;
 
-class WebRTCStats extends EventEmitter {
+    /** @hidden */
+    emit<N extends keyof WebRTCStatsEvents>(eventName: N, ...args: Parameters<WebRTCStatsEvents[N]>): boolean;
+}
+
+/**
+ * Representation of the WebRTC Statistics collection object.
+ *
+ * @example
+ * ```ts
+ * import { WebRTCStats } from '@dolbyio/webrtc-stats';
+ *
+ * const collection = new WebRTCStats({
+ *     getStatsInterval: 1000,
+ *     getStats: () => {
+ *         // TODO: return the statistics.
+ *     },
+ *     includeRawStats: false,
+ * });
+ *
+ * // The stats event is triggered after each interval has elapsed
+ * collection.on('stats', (event: OnStats) => {
+ *     console.log(event);
+ * });
+ *
+ * // Start the statistics collection
+ * collection.start();
+ * ```
+ */
+export class WebRTCStats extends EventEmitter implements WebRTCStats {
     #getStats: () => Promise<RTCStatsReport>;
     #getStatsInterval: number;
     #includeRawStats: boolean;
@@ -30,7 +59,8 @@ class WebRTCStats extends EventEmitter {
     #lastOnStats: OnStats | null = null;
 
     /**
-     * Creates a new {@link WebRTCStats} object.
+     * Creates an instance of the {@link WebRTCStats} class.
+     *
      * @param options Options for the WebRTC statistics collection.
      */
     constructor(options: WebRTCStatsOptions) {
@@ -72,7 +102,7 @@ class WebRTCStats extends EventEmitter {
             timestamp = new Date().toISOString();
         } catch (error) {
             this.#logger.error('Problem collecting the WebRTC statistics.', error);
-            this.emit(WebRTCStatsEvents.error, `Problem collecting the WebRTC statistics - ${error}`);
+            this.emit('error', `Problem collecting the WebRTC statistics - ${error}`);
 
             return;
         }
@@ -135,7 +165,7 @@ class WebRTCStats extends EventEmitter {
         }
 
         this.#lastOnStats = eventPayload;
-        this.emit(WebRTCStatsEvents.stats, eventPayload);
+        this.emit('stats', eventPayload);
     };
 
     #getCodec(rtcStatsReport: RTCStatsReport, codecId?: string): StatsCodec {
@@ -278,5 +308,3 @@ class WebRTCStats extends EventEmitter {
         eventPayload.availableIncomingBitrate = entry.availableIncomingBitrate;
     }
 }
-
-export default WebRTCStats;

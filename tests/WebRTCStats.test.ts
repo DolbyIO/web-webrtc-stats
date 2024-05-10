@@ -3,7 +3,7 @@ import second from './webRTCStats/second.json';
 import codec from './webRTCStats/codec.json';
 import noCodec from './webRTCStats/noCodec.json';
 import parseCandidatePair from './webRTCStats/parseCandidatePair.json';
-import WebRTCStats, { WebRTCStatsEvents, OnStats } from '../src/';
+import { WebRTCStats, OnStats } from '../src/';
 
 const getLocalStats = (data: any) => {
     return new Promise<RTCStatsReport>((r) => {
@@ -33,7 +33,7 @@ const getResult = (data: any): Promise<OnStats> => {
             const onStatsEvent = jest.fn((event: OnStats) => {
                 result = event;
             });
-            collection.on(WebRTCStatsEvents.stats, onStatsEvent);
+            collection.on('stats', onStatsEvent);
 
             collection.start();
             await new Promise((r) => setTimeout(r, 1500));
@@ -75,7 +75,7 @@ describe('webRTCStats', () => {
         });
 
         const onStatsEvent = jest.fn((_) => {});
-        collection.on(WebRTCStatsEvents.stats, onStatsEvent);
+        collection.on('stats', onStatsEvent);
 
         collection.start();
         await new Promise((r) => setTimeout(r, expectedCalls * interval + 50));
@@ -94,7 +94,7 @@ describe('webRTCStats', () => {
         });
 
         const onStatsEvent = jest.fn((_) => {});
-        collection.on(WebRTCStatsEvents.stats, onStatsEvent);
+        collection.on('stats', onStatsEvent);
 
         collection.start();
         await new Promise((r) => setTimeout(r, expectedCalls * defaultInterval + 500));
@@ -112,7 +112,7 @@ describe('webRTCStats', () => {
         });
 
         const onErrorEvent = jest.fn((_) => {});
-        collection.on(WebRTCStatsEvents.error, onErrorEvent);
+        collection.on('error', onErrorEvent);
 
         collection.start();
         await new Promise((r) => setTimeout(r, 150));
