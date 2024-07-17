@@ -14,7 +14,7 @@ module.exports = {
     resolve: {
         extensions: ['.tsx', '.ts', '.js'],
     },
-    devtool: 'eval-source-map',
+    devtool: 'source-map',
     output: {
         filename: 'webrtc-stats.js',
         sourceMapFilename: 'webrtc-stats.js.map',
