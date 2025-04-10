@@ -72,7 +72,7 @@ collection.on('error', (reason: string) => {
 
 ### Example
 
-Example on how to start a statistics collection from the [Dolby Millicast](https://docs.dolby.io/streaming-apis/docs) SDK.
+Example on how to start a statistics collection from the [Dolby OptiView](https://docs.optiview.dolby.com/millicast/) SDK.
 
 ```ts
 import { WebRTCStats, OnStats } from '@dolbyio/webrtc-stats';
@@ -89,7 +89,7 @@ const tokenGenerator = () =>
 
 const publisher = new Publish(STREAM_NAME, tokenGenerator);
 
-// HERE: Publish a stream to Dolby Millicast
+// HERE: Publish a stream to Dolby OptiView
 
 const collection = new WebRTCStats({
     getStatsInterval: 1000,
@@ -141,7 +141,7 @@ npm run docs
 
 ## Related Projects
 
--   [Millicast SDK](https://github.com/millicast/millicast-sdk)
--   [js-logger](https://github.com/jonnyreeves/js-logger)
--   [TypeDoc](https://typedoc.org)
--   [Jest](https://jestjs.io/)
+- [Millicast SDK](https://github.com/millicast/millicast-sdk)
+- [js-logger](https://github.com/jonnyreeves/js-logger)
+- [TypeDoc](https://typedoc.org)
+- [Jest](https://jestjs.io/)

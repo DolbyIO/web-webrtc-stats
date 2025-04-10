@@ -247,7 +247,7 @@ export class WebRTCStats extends EventEmitter implements WebRTCStats {
     async #getInputAudio(rtcStatsReport: RTCStatsReport, entry: RTCInboundRtpStreamStats, last: InputAudio): Promise<InputAudio> {
         const bitrate = calculateRate(entry.timestamp, entry.bytesReceived, last?.timestamp, last?.totalBytesReceived);
         const packetRate = calculateRate(entry.timestamp, entry.packetsReceived, last?.timestamp, last?.totalPacketsReceived);
-        const packetLossRatio = calculatePacketsLostRatio(entry.packetsReceived, entry.packetsLost, last?.totalPacketsReceived, last?.totalPacketsLost);
+        const packetLossRatio = calculatePacketsLostRatio(entry.packetsLost, entry.packetsReceived, last?.totalPacketsReceived, last?.totalPacketsLost);
         const packetLossDelta = (entry.packetsLost ?? 0) - (last?.totalPacketsLost ?? 0);
         const codec = this.#getCodec(rtcStatsReport, entry.codecId);
 

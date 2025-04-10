@@ -20,8 +20,8 @@ assignees: FabienLavocat
 
 **Specifications**
 
--   OS: [e.g. Windows, macOS, ...]
--   Version:
-    -   _for each libraries : name -> version_
-    -   [e.g. @dolbyio/webrtc-stats 1.0.0]
-    -   [...]
+- OS: [e.g. Windows, macOS, ...]
+- Version:
+    - _for each libraries : name -> version_
+    - [e.g. @dolbyio/webrtc-stats 1.0.0]
+    - [...]
