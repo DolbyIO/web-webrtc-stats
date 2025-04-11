@@ -30,7 +30,7 @@ export const calculatePacketsLostRatio = (
         return 0;
     }
 
-    const currentLostPackages = totalPacketsLost - (lastTotalPacketsLost ?? 0);
-    const currentReceivedPackages = totalPacketsReceived - (lastTotalPacketsReceived ?? 0);
-    return currentLostPackages / currentReceivedPackages;
+    const currentLostPackets = totalPacketsLost - (lastTotalPacketsLost ?? 0);
+    const currentReceivedPackets = totalPacketsReceived - (lastTotalPacketsReceived ?? 0);
+    return currentLostPackets / currentReceivedPackets;
 };
