@@ -26,11 +26,13 @@ export const calculatePacketsLostRatio = (
     lastTotalPacketsLost?: number,
     lastTotalPacketsReceived?: number
 ): number => {
-    if (totalPacketsReceived == 0) {
+    const currentLostPackets = totalPacketsLost - (lastTotalPacketsLost ?? 0);
+    const currentReceivedPackets = totalPacketsReceived - (lastTotalPacketsReceived ?? 0);
+    const currentPacketsExpected = currentLostPackets + currentReceivedPackets;
+
+    if (currentPacketsExpected === 0) {
         return 0;
     }
 
-    const currentLostPackets = totalPacketsLost - (lastTotalPacketsLost ?? 0);
-    const currentReceivedPackets = totalPacketsReceived - (lastTotalPacketsReceived ?? 0);
-    return currentLostPackets / currentReceivedPackets;
+    return currentLostPackets / currentPacketsExpected;
 };
