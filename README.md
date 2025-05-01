@@ -4,7 +4,7 @@
 [![npm](https://img.shields.io/npm/v/@dolbyio/webrtc-stats)](https://www.npmjs.com/package/@dolbyio/webrtc-stats)
 [![License](https://img.shields.io/github/license/DolbyIO/web-webrtc-stats)](LICENSE)
 
-# Dolby.io WebRTC Statistics
+# Dolby OptiView WebRTC Statistics
 
 This project is a library to use to parse WebRTC statistics.
 
@@ -87,7 +87,7 @@ const tokenGenerator = () =>
         streamName: STREAM_NAME,
     });
 
-const publisher = new Publish(STREAM_NAME, tokenGenerator);
+const publisher = new Publish(undefined, tokenGenerator);
 
 // HERE: Publish a stream to Dolby OptiView
 
