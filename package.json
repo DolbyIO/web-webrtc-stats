@@ -1,7 +1,7 @@
 {
     "name": "@dolbyio/webrtc-stats",
-    "version": "1.0.3",
-    "description": "Dolby.io WebRTC Statistics",
+    "version": "1.0.4",
+    "description": "Dolby OptiView WebRTC Statistics",
     "main": "dist/webrtc-stats.js",
     "typings": "dist/index.d.ts",
     "scripts": {
@@ -23,7 +23,8 @@
         "stats",
         "statistics",
         "dolbyio",
-        "millicast"
+        "millicast",
+        "optiview"
     ],
     "files": [
         "dist/*",
