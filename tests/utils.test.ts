@@ -58,9 +58,16 @@ describe('utils test suite', () => {
     });
 
     test('calculatePacketsLostRatio', () => {
-        expect(calculatePacketsLostRatio(100, 0)).toEqual(0);
-        expect(calculatePacketsLostRatio(100, 200)).toEqual(0.5);
-        expect(calculatePacketsLostRatio(100, 200, 50)).toEqual(0.25);
-        expect(calculatePacketsLostRatio(100, 200, 50, 100)).toEqual(0.5);
+        expect(calculatePacketsLostRatio(100, 0)).toEqual(1);
+        expect(calculatePacketsLostRatio(0, 1)).toEqual(0);
+
+        expect(calculatePacketsLostRatio(100, 300)).toEqual(0.25);
+        expect(calculatePacketsLostRatio(150, 100, 50)).toEqual(0.5);
+        expect(calculatePacketsLostRatio(150, 200, 50, 100)).toEqual(0.5);
+
+        // corner cases
+        expect(calculatePacketsLostRatio(0, 0, 0, 0)).toEqual(0);
+        expect(calculatePacketsLostRatio(100, 100, 100, 100)).toEqual(0);
+        expect(calculatePacketsLostRatio(0, 0)).toEqual(0);
     });
 });
