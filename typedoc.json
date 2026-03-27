@@ -4,7 +4,7 @@
         "GitHub": "https://github.com/DolbyIO/web-webrtc-stats",
         "NPM": "https://www.npmjs.com/package/@dolbyio/webrtc-stats"
     },
-    "name": "Dolby.io WebRTC Statistics",
+    "name": "Dolby OptiView WebRTC Statistics",
     "includeVersion": true,
     "entryPoints": ["src/index.ts"],
     "entryPointStrategy": "expand",
@@ -12,6 +12,11 @@
     "excludePrivate": true,
     "excludeNotDocumented": true,
     "excludeNotDocumentedKinds": ["Property", "Interface", "TypeAlias"],
+    "externalSymbolLinkMappings": {
+        "@types/node": {
+            "EventEmitter": "#"
+        }
+    },
     "plugin": ["typedoc-plugin-mdn-links"],
     "out": "docs"
 }
