@@ -4,6 +4,7 @@ import codec from './webRTCStats/codec.json';
 import noCodec from './webRTCStats/noCodec.json';
 import parseCandidatePair from './webRTCStats/parseCandidatePair.json';
 import { WebRTCStats, OnStats } from '../src/';
+import { describe, expect, test } from '@jest/globals';
 
 const getLocalStats = (data: any) => {
     return new Promise<RTCStatsReport>((r) => {
@@ -30,6 +31,7 @@ const getResult = (data: any): Promise<OnStats> => {
             });
 
             var result: OnStats | null = null;
+            // @ts-ignore
             const onStatsEvent = jest.fn((event: OnStats) => {
                 result = event;
             });
@@ -58,6 +60,7 @@ describe('webRTCStats', () => {
     test('start / stop', async () => {
         const expectedCalls = 2;
         const interval = 50;
+        // @ts-ignore
         jest.setTimeout((expectedCalls + 2) * interval);
 
         const collection = new WebRTCStats({
@@ -65,6 +68,7 @@ describe('webRTCStats', () => {
             getStats: () => getLocalStats(first),
         });
 
+        // @ts-ignore
         const onStatsEvent = jest.fn((_) => {});
         collection.on('stats', onStatsEvent);
 
@@ -78,12 +82,14 @@ describe('webRTCStats', () => {
     test('getStatsInterval', async () => {
         const expectedCalls = 2;
         const defaultInterval = 1000;
+        // @ts-ignore
         jest.setTimeout((expectedCalls + 2) * defaultInterval);
 
         const collection = new WebRTCStats({
             getStats: () => getLocalStats(first),
         });
 
+        // @ts-ignore
         const onStatsEvent = jest.fn((_) => {});
         collection.on('stats', onStatsEvent);
 
@@ -102,6 +108,7 @@ describe('webRTCStats', () => {
             },
         });
 
+        // @ts-ignore
         const onErrorEvent = jest.fn((_) => {});
         collection.on('error', onErrorEvent);
 

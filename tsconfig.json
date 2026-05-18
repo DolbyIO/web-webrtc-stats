@@ -1,15 +1,18 @@
 {
     "compilerOptions": {
-        "module": "commonjs",
+        "module": "node16",
         "esModuleInterop": true,
-        "target": "es6",
-        "moduleResolution": "node",
+        "target": "es2016",
+        "moduleResolution": "node16",
         "skipLibCheck": true,
         "sourceMap": true,
         "allowJs": true,
+        "rootDir": "./",
         "outDir": "./dist",
         "declaration": true,
-        "resolveJsonModule": true
+        "resolveJsonModule": true,
+        "types": ["node"],
+        "isolatedModules": true
     },
     "lib": ["es2015"],
     "include": ["./src/*.ts"]

@@ -182,8 +182,8 @@ export class WebRTCStats extends EventEmitter implements WebRTCStats {
     }
 
     async #getOutputBase(rtcStatsReport: RTCStatsReport, entry: RTCOutboundRtpStreamStats, last: OutputAudio): Promise<OutputBase> {
-        const bitrate = calculateRate(entry.timestamp, entry.bytesSent, last?.timestamp, last?.totalBytesSent);
-        const packetRate = calculateRate(entry.timestamp, entry.packetsSent, last?.timestamp, last?.totalPacketsSent);
+        const bitrate = calculateRate(entry.timestamp, entry.bytesSent!, last?.timestamp, last?.totalBytesSent);
+        const packetRate = calculateRate(entry.timestamp, entry.packetsSent!, last?.timestamp, last?.totalPacketsSent);
         const codec = this.#getCodec(rtcStatsReport, entry.codecId);
 
         const outputBase: OutputBase = {
@@ -191,16 +191,16 @@ export class WebRTCStats extends EventEmitter implements WebRTCStats {
             timestamp: entry.timestamp,
             mid: entry.mid,
             totalBytesSent: entry.bytesSent,
-            bytesSentDelta: entry.bytesSent - (last?.totalBytesSent ?? 0),
+            bytesSentDelta: entry.bytesSent! - (last?.totalBytesSent ?? 0),
             totalPacketsSent: entry.packetsSent,
-            packetsSentDelta: entry.packetsSent - (last?.totalPacketsSent ?? 0),
+            packetsSentDelta: entry.packetsSent! - (last?.totalPacketsSent ?? 0),
             bitrate: bitrate,
             packetRate: packetRate,
             targetBitrate: entry.targetBitrate,
             retransmittedPacketsSent: entry.retransmittedPacketsSent,
-            retransmittedPacketsSentDelta: entry.retransmittedPacketsSent - (last?.retransmittedPacketsSent ?? 0),
+            retransmittedPacketsSentDelta: entry.retransmittedPacketsSent! - (last?.retransmittedPacketsSent ?? 0),
             retransmittedBytesSent: entry.retransmittedBytesSent,
-            retransmittedBytesSentDelta: entry.retransmittedBytesSent - (last?.retransmittedBytesSent ?? 0),
+            retransmittedBytesSentDelta: entry.retransmittedBytesSent! - (last?.retransmittedBytesSent ?? 0),
             ...codec,
         };
 
@@ -208,10 +208,10 @@ export class WebRTCStats extends EventEmitter implements WebRTCStats {
     }
 
     async #parseOutboundRtpAudio(rtcStatsReport: RTCStatsReport, entry: RTCOutboundRtpStreamStats, eventPayload: OnStats) {
-        const last: OutputAudio = this.#lastOnStats?.output.audio.find((a) => a.id === entry.id);
+        const last: OutputAudio | undefined = this.#lastOnStats?.output.audio.find((a) => a.id === entry.id);
         if (last && entry.timestamp - last.timestamp <= 0) return;
 
-        const outputBase: OutputBase = await this.#getOutputBase(rtcStatsReport, entry, last);
+        const outputBase: OutputBase = await this.#getOutputBase(rtcStatsReport, entry, last!);
 
         const outputAudio: OutputAudio = {
             ...outputBase,
@@ -221,10 +221,10 @@ export class WebRTCStats extends EventEmitter implements WebRTCStats {
     }
 
     async #parseOutboundRtpVideo(rtcStatsReport: RTCStatsReport, entry: RTCOutboundRtpStreamStats, eventPayload: OnStats) {
-        const last: OutputVideo = this.#lastOnStats?.output.video.find((a) => a.id === entry.id);
+        const last: OutputVideo | undefined = this.#lastOnStats?.output.video.find((a) => a.id === entry.id);
         if (last && entry.timestamp - last.timestamp <= 0) return;
 
-        const outputBase: OutputBase = await this.#getOutputBase(rtcStatsReport, entry, last);
+        const outputBase: OutputBase = await this.#getOutputBase(rtcStatsReport, entry, last!);
 
         let qualityLimitationReason: QualityLimitationReason = QualityLimitationReason.none;
         if (entry.qualityLimitationReason) {
@@ -245,9 +245,9 @@ export class WebRTCStats extends EventEmitter implements WebRTCStats {
     }
 
     async #getInputAudio(rtcStatsReport: RTCStatsReport, entry: RTCInboundRtpStreamStats, last: InputAudio): Promise<InputAudio> {
-        const bitrate = calculateRate(entry.timestamp, entry.bytesReceived, last?.timestamp, last?.totalBytesReceived);
-        const packetRate = calculateRate(entry.timestamp, entry.packetsReceived, last?.timestamp, last?.totalPacketsReceived);
-        const packetLossRatio = calculatePacketsLostRatio(entry.packetsLost, entry.packetsReceived, last?.totalPacketsLost, last?.totalPacketsReceived);
+        const bitrate = calculateRate(entry.timestamp, entry.bytesReceived!, last?.timestamp, last?.totalBytesReceived);
+        const packetRate = calculateRate(entry.timestamp, entry.packetsReceived!, last?.timestamp, last?.totalPacketsReceived);
+        const packetLossRatio = calculatePacketsLostRatio(entry.packetsLost!, entry.packetsReceived!, last?.totalPacketsLost, last?.totalPacketsReceived);
         const packetLossDelta = (entry.packetsLost ?? 0) - (last?.totalPacketsLost ?? 0);
         const codec = this.#getCodec(rtcStatsReport, entry.codecId);
 
@@ -272,19 +272,19 @@ export class WebRTCStats extends EventEmitter implements WebRTCStats {
     }
 
     async #parseInboundRtpAudio(rtcStatsReport: RTCStatsReport, entry: RTCInboundRtpStreamStats, eventPayload: OnStats) {
-        const last: InputAudio = this.#lastOnStats?.input.audio.find((a) => a.id === entry.id);
+        const last: InputAudio | undefined = this.#lastOnStats?.input.audio.find((a) => a.id === entry.id);
         if (last && entry.timestamp - last.timestamp <= 0) return;
 
-        const inputAudio: InputAudio = await this.#getInputAudio(rtcStatsReport, entry, last);
+        const inputAudio: InputAudio = await this.#getInputAudio(rtcStatsReport, entry, last!);
 
         eventPayload.input.audio.push(inputAudio);
     }
 
     async #parseInboundRtpVideo(rtcStatsReport: RTCStatsReport, entry: RTCInboundRtpStreamStats, eventPayload: OnStats) {
-        const last: InputVideo = this.#lastOnStats?.input.video.find((a) => a.id === entry.id);
+        const last: InputVideo | undefined = this.#lastOnStats?.input.video.find((a) => a.id === entry.id);
         if (last && entry.timestamp - last.timestamp <= 0) return;
 
-        const inputAudio: InputAudio = await this.#getInputAudio(rtcStatsReport, entry, last);
+        const inputAudio: InputAudio = await this.#getInputAudio(rtcStatsReport, entry, last!);
 
         const inputVideo: InputVideo = {
             ...inputAudio,

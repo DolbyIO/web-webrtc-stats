@@ -1,7 +1,7 @@
 import { RTCRtpStreamStats } from './types/lib.dom';
 
 export const getMediaKind = (rtcStats: RTCRtpStreamStats): string => {
-    let mediaKind = rtcStats.kind || rtcStats.mediaType;
+    let mediaKind = (rtcStats.kind || rtcStats.mediaType) ?? '';
 
     // Safari is missing mediaType and kind for 'inbound-rtp'
     if (!['audio', 'video'].includes(mediaKind) && rtcStats.type === 'inbound-rtp') {
