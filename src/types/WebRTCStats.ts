@@ -31,17 +31,17 @@ export interface StatsCodec {
  */
 export enum QualityLimitationReason {
     /** The resolution and/or framerate is not limited. */
-    'none',
+    none,
     /** The resolution and/or framerate is primarily limited due to CPU load. */
-    'cpu',
+    cpu,
     /**
      * The resolution and/or framerate is primarily limited due to congestion cues during bandwidth estimation.
      * Typical, congestion control algorithms use inter-arrival time,
      * round-trip time, packet or other congestion cues to perform bandwidth estimation.
      */
-    'bandwidth',
+    bandwidth,
     /** The resolution and/or framerate is primarily limited for a reason other than the above. */
-    'other',
+    other,
 }
 
 /**

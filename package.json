@@ -1,6 +1,6 @@
 {
     "name": "@dolbyio/webrtc-stats",
-    "version": "1.2.0",
+    "version": "1.2.1",
     "description": "Dolby OptiView WebRTC Statistics",
     "main": "dist/webrtc-stats.js",
     "typings": "dist/src/index.d.ts",
@@ -39,11 +39,11 @@
         "esbuild": "^0.28.1",
         "esbuild-plugin-d.ts": "^2.0.1",
         "jest": "^30.4.2",
-        "prettier": "^3.8.4",
-        "ts-jest": "^29.4.11",
-        "ts-loader": "^9.6.1",
-        "typedoc": "^0.28.19",
+        "prettier": "^3.9.6",
+        "ts-jest": "^29.4.12",
+        "ts-loader": "^9.6.2",
+        "typedoc": "^0.28.20",
         "typedoc-plugin-mdn-links": "^5.1.1",
-        "typescript": "^6.0.3"
+        "typescript": "^6"
     }
 }

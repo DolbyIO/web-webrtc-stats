@@ -150,10 +150,10 @@ export interface RTCOfferOptions extends RTCOfferAnswerOptions {
 }
 
 export enum RTCQualityLimitationReason {
-    'none',
-    'cpu',
-    'bandwidth',
-    'other',
+    none,
+    cpu,
+    bandwidth,
+    other,
 }
 
 export interface RTCOutboundRtpStreamStats extends RTCSentRtpStreamStats {
