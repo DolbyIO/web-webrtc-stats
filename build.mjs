@@ -1,7 +1,7 @@
 import * as esbuild from 'esbuild';
 import { dtsPlugin } from 'esbuild-plugin-d.ts';
 
-await esbuild.build({
+const shared = {
     entryPoints: ['./src/index.ts'],
     bundle: true,
     platform: 'browser',
@@ -9,6 +9,18 @@ await esbuild.build({
     minifyWhitespace: true,
     legalComments: 'none',
     sourcemap: true,
-    outfile: 'dist/webrtc-stats.js',
-    plugins: [dtsPlugin()],
-});
+};
+
+await Promise.all([
+    esbuild.build({
+        ...shared,
+        format: 'esm',
+        outfile: 'dist/webrtc-stats.mjs',
+        plugins: [dtsPlugin()],
+    }),
+    esbuild.build({
+        ...shared,
+        format: 'cjs',
+        outfile: 'dist/webrtc-stats.js',
+    }),
+]);
