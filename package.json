@@ -3,7 +3,15 @@
     "version": "1.2.2",
     "description": "Dolby OptiView WebRTC Statistics",
     "main": "dist/webrtc-stats.js",
+    "module": "dist/webrtc-stats.mjs",
     "typings": "dist/src/index.d.ts",
+    "exports": {
+        ".": {
+            "types": "./dist/src/index.d.ts",
+            "import": "./dist/webrtc-stats.mjs",
+            "require": "./dist/webrtc-stats.js"
+        }
+    },
     "scripts": {
         "build": "node ./build.mjs",
         "prettier": "prettier --write .",
